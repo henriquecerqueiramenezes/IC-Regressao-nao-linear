@@ -1,0 +1,19 @@
+
+# Arquivos temporários do R
+.Rhistory
+.RData
+.Ruserdata
+
+# Configurações locais do RStudio
+.Rproj.user/
+
+# Arquivos de saída do R
+*.Rout
+
+# Arquivos temporários e de sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários de editores
+*.tmp
+*.bak
