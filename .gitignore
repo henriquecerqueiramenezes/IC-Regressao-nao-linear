@@ -17,3 +17,6 @@ Thumbs.db
 # Arquivos temporários de editores
 *.tmp
 *.bak
+
+#Dados 
+*.xlsx
