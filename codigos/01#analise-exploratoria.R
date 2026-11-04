@@ -3,21 +3,21 @@
 #Orientando: Henrique Cerqueira
 #Orientador: Rick Mangueira
 
-#1.PREPARACAO DO AMBIENTE --------------------------------------------------
+#1.PREPARAÇÃO DO AMBIENTE --------------------------------------------------
 
-library(dplyr) #Para manipulacao de dados
+library(dplyr) #Para manipulação de dados
 library(readxl) #Para entrar com os dados do Excel
-library(ggplot2) #Para criacao dos Graficos
+library(ggplot2) #Para criação dos Gráficos
 
 #2.IMPORTANDO OS DADOS ----------------------------------------------------
 
 dad<-read_excel(file.choose())
 
-#3. PRE-PROCESSAMENTO DOS DADOS ---------------------------------------------
+#3. PRÉ-PROCESSAMENTO DOS DADOS ---------------------------------------------
 
 # ---- Estrutura dos dados ----
 head(dad) #Verificar os dados
-dim(dad) #Dimensao dos dados
+dim(dad) #Dimensão dos dados
 str(dad) #Estrutura dos dados
 summary(dad) #Resumo geral dos dados
 
@@ -26,27 +26,27 @@ colSums(is.na(dad))# Quantidade de valores ausentes por variavel
 sum(duplicated(dad))# Linhas duplicadas
 sapply(dad, \(x) length(unique(x)))# Quantidade de valores distintos por variavel
 
-# ---- Variaveis Numericas ----
+# ---- Variáveis Numericas ----
 
 #### Altura ####
 
 summary(dad$altura)
 
-mean(dad$altura, na.rm = TRUE) #Media
+mean(dad$altura, na.rm = TRUE) #Média
 median(dad$altura, na.rm = TRUE) #Mediana
-sd(dad$altura, na.rm = TRUE) #Desvio Padrao
+sd(dad$altura, na.rm = TRUE) #Desvio Padrão
 IQR(dad$altura, na.rm = TRUE) #Intervalo Interquartil
 
 #### Diametro ####
 
 summary(dad$diametro)
 
-mean(dad$diametro, na.rm = TRUE) #Media
+mean(dad$diametro, na.rm = TRUE) #Média
 median(dad$diametro, na.rm = TRUE) #Mediana
-sd(dad$diametro, na.rm = TRUE) #Desvio Padrao
+sd(dad$diametro, na.rm = TRUE) #Desvio Padrão
 IQR(dad$diametro, na.rm = TRUE) #Intervalo Interquartil
 
-# ---- Variaveis Categoricas ----
+# ---- Variáveis Categoricas ----
 
 #### Tipo de Agua ####
 #1-abastecimento
@@ -83,7 +83,7 @@ dad %>%
       diametro <= 0
   )
 
-#4. ANALISE EXPLORATORIA DE DADOS --------------------------------------------
+#4. ANÁLISE EXPLORATÓRIA DE DADOS --------------------------------------------
 
 ## ---- Agrupamentos ----
 
@@ -114,7 +114,7 @@ resumo_trat <- dad %>%
 
 resumo_trat
 
-## ---- Visualizacao dos Dados ----
+## ---- Visualização dos Dados ----
 
 #---- Distribuição dos dado ----
 
@@ -124,7 +124,7 @@ geom_histogram(bins = 20, color = "white") +
   labs(
     title = "Distribuicao da Altura da Pimenta",
     x = "Altura(cm)",
-    y = "Frequencia"
+    y = "Frequência"
   ) +
   theme_minimal()
 
@@ -132,13 +132,13 @@ geom_histogram(bins = 20, color = "white") +
 ggplot(dad, aes(x = diametro)) +
   geom_histogram(bins = 20, color = "white") +
   labs(
-    title = "Distribuicao da Diametro da Pimenta",
+    title = "Distribuição da Diametro da Pimenta",
     x = "Diametro(cm)",
-    y = "Frequencia"
+    y = "Frequência"
   ) +
   theme_minimal()
 
-#Grafico de Densidade Altura da Pimenta
+#Gráfico de Densidade Altura da Pimenta
 ggplot(dad, aes(x= altura)) +
   geom_density() +
   labs(
@@ -156,27 +156,27 @@ ggplot(dad, aes(x= diametro)) +
     x = "Diametro(cm)",
     y = "Frequência"
   ) +
-  theme_minimal() # Nao é um grafico muito interessante para nossa analise
+  theme_minimal() # Não é um gráfico muito interessante para nossa análise
 
 #---- Graficos crescimento temporal ----
 
-# Grafico de Dispersao da altura ao longo dos dias
+# Gráfico de Dispersão da altura ao longo dos dias
 ggplot(dad, aes(x = dias, y = altura)) +
   geom_point(alpha = 0.6) +
   labs(
-    title = "Dispersao da Altura x Dias da Pimenta Biquinho",
+    title = "Dispersão da Altura x Dias da Pimenta Biquinho",
     x = "Tempo(Dias)",
-    y = "Altura(Cm)"
+    y = "Altura(cm)"
   ) +
   theme_minimal() 
 
-# Grafico de Dispersao do Diametro ao longo dos dias
+# Gráfico de Dispersão do Diametro ao longo dos dias
 ggplot(dad, aes(x = dias, y = diametro)) +
   geom_point(alpha = 0.6) +
   labs(
-    title = "Dispersao do Diametro x Dias da Pimenta Biquinho",
+    title = "Dispersão do Diametro x Dias da Pimenta Biquinho",
     x = "Tempo(Dias)",
-    y = "Diametro(Cm)"
+    y = "Diametro(cm)"
   ) +
   theme_minimal() 
 
@@ -190,7 +190,7 @@ ggplot(dad, aes(x = dias, y = diametro, group= dias)) +
   geom_boxplot(aes(fill = dias)) +
   theme_minimal()
 
-#Grafico das medias da altura com barras de erro
+#Gráfico das médias da altura com barras de erro
 ggplot(resumo_trat,
        aes(x = dias, y = media_altura,
            color = factor(lamina),
@@ -206,14 +206,14 @@ ggplot(resumo_trat,
   ) +
   labs(
     x = "Tempo(Dias)",
-    y = "Altura media",
-    color = "Lamina",
-    title = "Crescimento medio da altura"
+    y = "Altura média",
+    color = "Lâmina",
+    title = "Crescimento médio da altura"
   ) +
   theme_minimal()
 
 
-#Grafico das medias do diametro com barras de erro 
+#Gráfico das médias do diametro com barras de erro 
 ggplot(resumo_trat,
        aes(x = dias, y = media_diametro,
            color = factor(lamina),
@@ -229,10 +229,42 @@ ggplot(resumo_trat,
   ) +
   labs(
     x = "Tempo(Dias)",
-    y = "Diametro medio",
+    y = "Diametro médio",
     color = "Lâmina",
-    title = "Crescimento medio do diametro"
+    title = "Crescimento médio do diametro"
   ) +
   theme_minimal()
 
+# ---- Graficos de Comparação Entre tratamentos ----
 
+#Gráfico de Crescimento Sigmoid Altura média por tipo de água e lâmina
+ggplot(resumo_trat,
+       aes(x = dias, y = media_altura,
+           color = factor(lamina),
+           group = lamina)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  facet_wrap(~`Tipo de agua`) +
+  labs(
+    x = "Dias após a semeadura",
+    y = "Altura média",
+    color = "Lâmina",
+    title = "Altura média por tipo de água e lâmina"
+  ) +
+  theme_minimal()
+
+#Gráfico de Crescimento Sigmoid Altura média por lâmina e tipo de água
+ggplot(resumo_trat,
+       aes(x = dias, y = media_altura,
+           color = factor(`Tipo de agua`),
+           group = `Tipo de agua`)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  facet_wrap(~lamina) +
+  labs(
+    x = "Dias após a semeadura",
+    y = "Altura média",
+    color = "Tipo de água",
+    title = "Altura média por lâmina e tipo de água"
+  ) +
+  theme_minimal()
