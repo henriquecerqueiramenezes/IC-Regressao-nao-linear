@@ -235,6 +235,38 @@ ggplot(resumo_trat,
   ) +
   theme_minimal()
 
+#Grafico de Disperção Altura x Diametro
+ggplot(dad,
+       aes(x = altura, y = diametro,
+           color = factor(lamina))) +
+  geom_point(alpha = 0.6) +
+  labs(
+    x = "Altura",
+    y = "Diametro",
+    color = "Lâmina",
+    title = "Relação entre altura e diâmetro"
+  ) +
+  theme_minimal()
+
+#Gráfico de Dispersão Altura x Diametro por dia
+ggplot(dad,
+       aes(x = altura, y = diametro)) +
+  geom_point(alpha = 0.5) +
+  facet_wrap(~dias, ncol=4) +
+  theme_minimal()
+
+#Gráfico de Dispersão Altura x Diamero por dia(com cor)
+ggplot(dad, aes(x = altura, y = diametro, color = dias)) +
+  geom_point(alpha = 0.6, size = 2) +
+  scale_color_viridis_c() +
+  theme_minimal() +
+  labs(
+    title = "Relação entre altura e diâmetro",
+    x = "Altura (cm)",
+    y = "Diâmetro (mm)",
+    color = "Dias"
+  )
+
 # ---- Graficos de Comparação Entre tratamentos ----
 
 #Gráfico de Crescimento Sigmoid Altura média por tipo de água e lâmina
