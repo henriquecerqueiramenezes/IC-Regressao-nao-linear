@@ -158,6 +158,10 @@ dad30
 modelo30 <- aov(dad30$altura~dad30$bloco+dad30$`Tipo de agua`*dad30$lamina)
 anova(modelo30)
 
+dad163 <- dad %>%
+  filter(dias==163)
+
+
 #pacote ExpDes
 fat2.rbd(
   dad23$`Tipo de agua`,

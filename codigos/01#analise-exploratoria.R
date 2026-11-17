@@ -83,6 +83,31 @@ dad %>%
       diametro <= 0
   )
 
+# ---- Separando os Dias ----
+#Dia 23
+dad23 <- dad %>%
+  filter(dias == 23)
+
+#Dia 51
+dad51 <- dad %>%
+  filter(dias == 51)
+
+#Dia 79
+dad79 <- dad %>%
+  filter(dias == 79)
+
+#Dia 107
+dad107 <- dad %>%
+  filter(dias == 107)
+
+#Dia 135
+dad135 <- dad %>%
+  filter(dias == 135)
+
+#Dia 163
+dad163 <- dad %>%
+  filter(dias == 163)
+
 #4. ANÁLISE EXPLORATÓRIA DE DADOS --------------------------------------------
 
 ## ---- Agrupamentos ----
@@ -300,3 +325,4 @@ ggplot(resumo_trat,
     title = "Altura média por lâmina e tipo de água"
   ) +
   theme_minimal()
+
