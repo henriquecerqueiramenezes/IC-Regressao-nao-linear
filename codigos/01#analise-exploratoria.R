@@ -280,7 +280,7 @@ ggplot(dad,
   facet_wrap(~dias, ncol=4) +
   theme_minimal()
 
-#Gráfico de Dispersão Altura x Diamero por dia(com cor)
+#Gráfico de Dispersão Altura x Diamero por dia(com cor) 
 ggplot(dad, aes(x = altura, y = diametro, color = dias)) +
   geom_point(alpha = 0.6, size = 2) +
   scale_color_viridis_c() +
@@ -325,4 +325,120 @@ ggplot(resumo_trat,
     title = "Altura média por lâmina e tipo de água"
   ) +
   theme_minimal()
+
+
+#Gráfico de dispersão altura x tempo (Com coloração na lâmina) Gráfico Poster semest 026 ----
+ggplot(dad, aes(x = dias, y = altura, color = factor(lamina))) +
+  geom_point(alpha = 0.6, size = 2) +
+  labs(
+    title = "Crescimento em altura da pimenta-biquinho ao longo do tempo",
+    subtitle = "Distribuição das observações conforme as lâminas de irrigação",
+    x = "Dias após a semeadura",
+    y = "Altura das plantas (cm)",
+    color = "Lâmina de irrigação"
+  ) +
+  scale_color_discrete(
+    labels = c("20%", "40%", "60%", "80%", "100%")
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black"),
+    legend.position = "right"
+  )
+
+#Gráfico de dispersão diâmetro x tempo (Com coloração nas lâminas) Gráfico Poster semest 026 ----
+ggplot(dad, aes(x = dias, y = diametro, color = factor(lamina))) +
+  geom_point(alpha = 0.6, size = 2) +
+  labs(
+    title = "Crescimento em diâmetro da pimenta-biquinho ao longo do tempo",
+    subtitle = "Distribuição das observações conforme as lâminas de irrigação",
+    x = "Dias após a semeadura",
+    y = "Diâmetro das plantas (cm)",
+    color = "Lâmina de irrigação"
+  ) +
+  scale_color_discrete(
+    labels = c("20%", "40%", "60%", "80%", "100%")
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black"),
+    legend.position = "right"
+  )
+
+# ---- Gráficos de Dias Específicos ----
+
+#Boxplot dia 163 Altura x Lamina ( Versão sem agrupar???????????) ####
+ggplot(dad163, aes(x = lamina, y = altura, fill = lamina)) +
+  geom_boxplot(
+    alpha = 0.7,
+    width = 0.65,
+    outlier.shape = 16,
+    outlier.size = 2
+  ) +
+  labs(
+    title = "Distribuição da altura das plantas aos 163 dias",
+    subtitle = "Comparação entre as lâminas de irrigação",
+    x = "Lâmina de irrigação (% da necessidade hídrica)",
+    y = "Altura das plantas",
+    fill = "Lâmina"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black")
+  )
+
+#Boxplot dia 163 Altura x Lamina Versão agrupada (Gráfico Poster semest 026) ----
+ggplot(dad163, aes(x = lamina, 
+                   y = altura, 
+                   fill = lamina,
+                   group = lamina)) +
+  geom_boxplot(
+    alpha = 0.7,
+    width = 0.65,
+    outlier.shape = 16,
+    outlier.size = 2
+  ) +
+  labs(
+    title = "Distribuição da altura das plantas aos 163 dias",
+    subtitle = "Comparação entre as lâminas de irrigação",
+    x = "Lâmina de irrigação (% da necessidade hídrica)",
+    y = "Altura das plantas",
+    fill = "Lâmina"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black")
+  )
+
+
+#BoxPlot dia 163 Diametro x Lamina Versão agrupada (Gráfico Poster semest 026) ----
+ggplot(dad163, aes(x = lamina, 
+                   y = diametro, 
+                   fill = lamina,
+                   group= lamina)) +
+  geom_boxplot(
+    alpha = 0.7,
+    width = 0.65,
+    outlier.shape = 16,
+    outlier.size = 2
+  ) +
+  labs(
+    title = "Distribuição do diâmetro das plantas aos 163 dias",
+    subtitle = "Comparação entre as lâminas de irrigação",
+    x = "Lâmina de irrigação (% da necessidade hídrica)",
+    y = "Diâmetro das plantas",
+    fill = "Lâmina"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black")
+  )
 
