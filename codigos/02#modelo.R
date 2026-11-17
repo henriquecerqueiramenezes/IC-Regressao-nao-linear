@@ -8,7 +8,8 @@
 library(dplyr) #Para manipulacao de dados
 library(readxl) #Para entrar com os dados do Excel
 library(ggplot2) #Para criacao dos Graficos
-library(ExpDes)
+library(ExpDes) #Para ANOVA
+library(broom) #Para organizar Tabela
 
 #2.IMPORTANDO OS DADOS ----------------------------------------------------
 
@@ -16,7 +17,7 @@ dad<-read_excel(file.choose())
 
 #3.PREPARAÇÃO DADOS -------------------------------
 
-#Classificando cada variáveil
+#Classificando cada variável
 dad <- dad %>%
   mutate(
     bloco = factor(bloco),
@@ -24,9 +25,6 @@ dad <- dad %>%
     lamina = factor(lamina),#torna categorico
     dias = as.numeric(dias)
   )
-
-#Verificando Balancamento
-with(dad23, table(bloco, `Tipo de agua`, lamina))
 
 #4.ANOVA -------------------------------------------
 
@@ -46,18 +44,23 @@ fat2.rbd(
   sigF = 0.05
 )
 
-# Função de ANOVA utilizando ExpDes
+# 4.1 ANOVA UTILIZANDO EXPDES --------------------------------
+
 anova_expdes <- function(data, dia, resposta) {
-  
+
   dados_dia <- data %>%
     filter(dias == dia) %>%
-    drop_na(all_of(resposta))
-  
+    filter(!is.na(.data[[resposta]]))
+
   cat("\n====================================\n")
   cat("DIA:", dia, "\n")
   cat("RESPOSTA:", resposta, "\n")
   cat("====================================\n")
-  
+
+  if (nrow(dados_dia) == 0) {
+    stop("Não existem observações para esse dia e variável.")
+  }
+
   fat2.rbd(
     factor1 = dados_dia$`Tipo de agua`,
     factor2 = dados_dia$lamina,
@@ -71,107 +74,64 @@ anova_expdes <- function(data, dia, resposta) {
   )
 }
 
+# Dias selecionados para a ANOVA
+dias_selecionados <- c(23, 51, 79, 107, 135, 163)
 
-# Altura em todos os dias
-for (d in sort(unique(dad$dias))) {
+# ALTURA ANOVA DIAS SELECIONADOS ------------------------------------------
+for (d in dias_selecionados) {
   anova_expdes(dad, d, "altura")
 }
 
-# Diâmetro em todos os dias
+# DIAMETRO ANOVA DIAS SELECIONADOS ----------------------------------------
+
 for (d in sort(unique(dad$dias))) {
   anova_expdes(dad, d, "diametro")
 }
 
-######################
+# 5. FUNÇÃO PARA EXTRAIR OS RESULTADOS DA ANOVA -------------
 
 anova_aov <- function(data, dia, resposta) {
-
+  
   dados_dia <- data %>%
     filter(dias == dia) %>%
-    drop_na(all_of(resposta))
-
+    filter(!is.na(.data[[resposta]]))
+  
   modelo <- aov(
     as.formula(
       paste0(
-        resposta,
-        " ~ bloco + `Tipo de agua` * lamina"
+        "`", resposta, "` ~ bloco + `Tipo de agua` * lamina"
       )
     ),
     data = dados_dia
   )
-
+  
   tabela <- broom::tidy(anova(modelo))
-
+  
   tabela %>%
+    filter(term != "Residuals") %>%
     mutate(
       dias = dia,
       resposta = resposta
     )
 }
 
-# Altura
+# RESULTADOS DA ALTURA --------------------------------------
+
 tab_altura <- bind_rows(
   lapply(
-    sort(unique(dad$dias)),
+    dias_selecionados,
     function(d) anova_aov(dad, d, "altura")
   )
 )
 
-# Diâmetro
+# RESULTADOS DO DIAMETRO ------------------------------------
 tab_diametro <- bind_rows(
   lapply(
-    sort(unique(dad$dias)),
+    dias_selecionados,
     function(d) anova_aov(dad, d, "diametro")
   )
 )
 
-# Visualizar
-tab_altura
-tab_diametro
-
-# Exportar
-write.csv2(tab_altura, "anova_altura.csv", row.names = FALSE)
-write.csv2(tab_diametro, "anova_diametro.csv", row.names = FALSE)
-
-
-# Altura em todos os dias
-for (d in sort(unique(dad$dias))) {
-  anova_expdes(dad, d, "altura")
-}
-
-# Diâmetro em todos os dias
-for (d in sort(unique(dad$dias))) {
-  anova_expdes(dad, d, "diametro")
-}
-
-
-## ---- DELINEAMENTO EM BLOCO NO ARRANJO FATORIAL (analise de variancia anova) RASCUNHO----
-names(dad)
-dad23 <- dad %>%
-  filter(dias==23)
-modelo23 <- aov(dad23$altura~dad23$bloco+dad23$`Tipo de agua`*dad23$lamina)
-anova(modelo23)
-
-dad30 <- dad %>%
-  filter(dias==30)
-dad30
-modelo30 <- aov(dad30$altura~dad30$bloco+dad30$`Tipo de agua`*dad30$lamina)
-anova(modelo30)
-
-#pacote ExpDes
-fat2.rbd(
-  dad23$`Tipo de agua`,
-  dad23$lamina,
-  dad23$bloco,
-  dad23$altura)
-
-## ---- ANOVA Completo ----
-dad23 <- dad %>%
-  filter(dias==23)
-
-modelo23 <- aov(
-  altura ~ bloco + `Tipo de agua` * lamina,
-  data = dad23
-)
-
-anova(modelo23)
+#Visualização
+print(tab_altura, n= 25)
+print(tab_diametro, n=25)
